@@ -11,7 +11,6 @@ import { sequelize } from "./db/db";
 
 import { Admin } from "./models/admin";
 import { ChurchEvent } from "./models/church-events";
-import { RefreshToken } from "./models/refresh-tokens";
 
 async function seedAdmin() {
     await sequelize.authenticate();
@@ -23,8 +22,6 @@ async function seedAdmin() {
     where: {username: "admin"},
     defaults: {password: hashedPassword}
    })
-  
-    console.log(await RefreshToken.findAll())
 }
 
 
@@ -32,11 +29,11 @@ const initialize = async () => {
     try {
         await server.listen({
             host: "0.0.0.0",
-            port: 8080
+            port: 8080,
         })
         
         console.log("Server is Running")
-            seedAdmin();
+        seedAdmin();
     } catch (error) {
         server.log.error(error);
         process.exit(1);
@@ -46,12 +43,12 @@ const initialize = async () => {
 configDotenv();
 const PREFIX = "/api/v1";
 
-const server: FastifyInstance = Fastify({ logger: true });
+const server: FastifyInstance = Fastify({ logger: false });
 
 server.register(fastifyCors, {
-    origin: "http://localhost:3000", //JUST IN ENV DEV 
+    origin: process.env.CLIENT_URL, //JUST IN ENV DEV 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization','Set-Cookie', 'Cookie'],
+    allowedHeaders: ['Content-Type', 'Authorization','Set-Cookie', 'Cookie', "Access-Control-Allow-Credentials"],
     exposedHeaders: ['Set-Cookie'],
     credentials: true
 })

@@ -74,6 +74,8 @@ export async function eventsController(fastify: FastifyInstance): Promise<void> 
 
     fastify.put("/events/:id", { preHandler: [isLogged, canEventBeEditedOrDeleted] }, async (request: FastifyRequest, reply: FastifyReply) => {
         try {
+            console.log("cheguei no service");
+
             const eventData = request.body as ChurchEvent;
             const { id } = request.params as { id: number };
 

@@ -22,7 +22,8 @@ export const authController = async (fastify: FastifyInstance) => {
 
             reply.setCookie("token", token, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
+                secure: true,
+                sameSite:"none",
                 path: "/",
                 maxAge: 60 * 15 //15 minutes
             })
